@@ -21,6 +21,12 @@ public class Player {
         this.status = false;
     }
     
+    public void resetGame() {
+        score = 0;
+        status = false;
+        plays = new int[9][9];
+    }
+    
     public String getName() {
         return name;
     }

@@ -83,11 +83,6 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
             System.out.println("Erro: " + ex.getMessage());
         }
         
-        selectGame();
-    }
-    
-    private static void selectGame() {
-        selected = games.get(new Random().nextInt(games.size()));
     }
 
     @Override
@@ -125,8 +120,6 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
 
     @Override
     public Boolean move(Move move, PlayerInterface player) throws RemoteException {
-        System.out.println("entrou");
-        
         int line = move.getLine();
         int col = move.getColumn();
         int val = move.getValue();
@@ -134,7 +127,6 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
         Player p = players.get(player);
 
         if(p.getPlay(line, col) == val) {
-            System.out.println("yolo");
             return selected.getCorrectValues()[line][col] == val;
         } 
         
@@ -147,12 +139,15 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
             }
             
             if(p.getScore() == selected.getScore()) {
-                selectGame();
-                for(PlayerInterface i : players.keySet()) {
+                    started = false;
+                    for (PlayerInterface i : players.keySet()) {
+                players.get(i).resetGame();
                     i.gameEnd(p.getName());
-                    players.get(i).status = false;
-                }
             }
+                    
+                }
+            
+            
             return true;
         }
         return false;
@@ -169,8 +164,10 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
             }
         }
         
+        selected = games.get(new Random().nextInt(games.size()));
+        started = true;
+        
         for(PlayerInterface pl : players.keySet()) {
-            started = true;
             pl.startGame(selected.getValues());
         }
     }
@@ -178,6 +175,15 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
     @Override
     public Boolean getGameStatus() throws RemoteException {
         return started;
+    }
+
+    @Override
+    public void isWinner(PlayerInterface player) throws RemoteException {
+         if(players.get(player).getScore() == selected.getScore()) {
+             for (PlayerInterface i : players.keySet()) {
+                i.gameEnd(players.get(player).getName());
+            }
+         }
     }
     
 }
