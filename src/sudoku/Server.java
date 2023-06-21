@@ -86,7 +86,7 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
     }
 
     @Override
-    public Boolean login(PlayerInterface player, String username) throws RemoteException {
+    public synchronized Boolean login(PlayerInterface player, String username) throws RemoteException {
         for (Player p : players.values()) {
             if (p.getName().equalsIgnoreCase(username)) {
                 return false;
@@ -107,19 +107,19 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
         return true;
     }
 
-    private void notifyPlayerJoined(String username) throws RemoteException {
+    private synchronized void notifyPlayerJoined(String username) throws RemoteException {
        for (PlayerInterface i : players.keySet()) {
            i.playerJoined(username);
         }
     }
 
     @Override
-    public void logout(PlayerInterface player) throws RemoteException {
+    public synchronized void logout(PlayerInterface player) throws RemoteException {
         players.remove(player);
     }
 
     @Override
-    public Boolean move(Move move, PlayerInterface player) throws RemoteException {
+    public synchronized Boolean move(Move move, PlayerInterface player) throws RemoteException {
         int line = move.getLine();
         int col = move.getColumn();
         int val = move.getValue();
@@ -154,7 +154,7 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
     }
 
     @Override
-    public void playerReady(PlayerInterface player) throws RemoteException {
+    public synchronized void playerReady(PlayerInterface player) throws RemoteException {
         Player p = players.get(player);
         p.setStatus(true);
         
@@ -173,12 +173,12 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
     }
 
     @Override
-    public Boolean getGameStatus() throws RemoteException {
+    public synchronized Boolean getGameStatus() throws RemoteException {
         return started;
     }
 
     @Override
-    public void isWinner(PlayerInterface player) throws RemoteException {
+    public synchronized void isWinner(PlayerInterface player) throws RemoteException {
          if(players.get(player).getScore() == selected.getScore()) {
              for (PlayerInterface i : players.keySet()) {
                 i.gameEnd(players.get(player).getName());
