@@ -8,11 +8,8 @@ import java.net.InetAddress;
 import java.rmi.*;
 import java.rmi.server.*;
 import java.rmi.registry.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -174,15 +171,6 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
     @Override
     public synchronized Boolean getGameStatus() throws RemoteException {
         return started;
-    }
-
-    @Override
-    public synchronized void isWinner(PlayerInterface player) throws RemoteException {
-        if (players.get(player).getScore() == selected.getScore()) {
-            for (PlayerInterface i : players.keySet()) {
-                i.gameEnd(players.get(player).getName());
-            }
-        }
     }
 
 }
