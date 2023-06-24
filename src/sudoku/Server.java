@@ -16,7 +16,7 @@ import java.util.Random;
 
 /**
  *
- * @author inoca
+ * @author Ines e Stéphane
  */
 public class Server extends UnicastRemoteObject implements SudokuInterface {
 
@@ -112,7 +112,17 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
 
     @Override
     public synchronized void logout(PlayerInterface player) throws RemoteException {
+        String username = players.get(player).getName();
         players.remove(player);
+        
+        if(players.isEmpty()) {
+            started = false;
+        } else {
+            for (PlayerInterface i : players.keySet()) {
+            i.playerLeft(username);
+        }
+        }
+        
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.rmi.*;
 
 /**
  *
- * @author inoca
+ * @author Ines e Stéphane
  */
 public interface SudokuInterface extends Remote {
     

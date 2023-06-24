@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author inoca
+ * @author Ines e Stéphane
  */
 public class Move implements Serializable {
     private int line;

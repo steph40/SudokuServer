@@ -6,7 +6,7 @@ package sudoku;
 
 /**
  *
- * @author inoca
+ * @author Ines e Stéphane
  */
 public class Player {
     

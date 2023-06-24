@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 /**
  *
- * @author inoca
+ * @author Ines e Stéphane
  */
 public interface PlayerInterface extends Remote{
     
