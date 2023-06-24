@@ -62,7 +62,7 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
         {8, 7, 5, 4, 2, 3, 6, 1, 9},
         {3, 6, 1, 5, 7, 9, 4, 8, 2},
         {4, 9, 2, 1, 6, 8, 5, 3, 7}};
-        
+
         int[][] unsolved2 = {{7, 3, 6, 8, 1, 4, 0, 0, 5},
         {0, 0, 9, 6, 0, 2, 0, 7, 8},
         {2, 1, 0, 9, 0, 0, 3, 6, 0},
@@ -72,7 +72,7 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
         {8, 0, 5, 0, 2, 3, 6, 1, 9},
         {0, 0, 0, 5, 0, 0, 4, 0, 2},
         {4, 9, 2, 1, 0, 8, 5, 0, 0}};
-        
+
         int[][] solved3 = {{3, 5, 1, 4, 9, 8, 7, 2, 6},
         {2, 4, 9, 7, 6, 5, 1, 3, 8},
         {6, 7, 8, 1, 3, 2, 9, 5, 4},
@@ -82,7 +82,7 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
         {7, 1, 3, 2, 4, 6, 8, 9, 5},
         {4, 2, 6, 8, 5, 9, 3, 7, 1},
         {9, 8, 5, 3, 7, 1, 4, 6, 2}};
-        
+
         int[][] unsolved3 = {{3, 5, 1, 0, 0, 8, 7, 0, 6},
         {0, 4, 0, 7, 0, 0, 1, 0, 0},
         {0, 7, 0, 0, 0, 0, 9, 5, 4},
@@ -92,7 +92,6 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
         {7, 1, 0, 0, 4, 6, 0, 0, 5},
         {0, 0, 6, 0, 5, 9, 0, 7, 0},
         {9, 8, 0, 3, 0, 0, 4, 0, 2}};
-        
 
         Sudoku game1 = new Sudoku(solved1, unsolved1);
         Sudoku game2 = new Sudoku(solved2, unsolved2);
@@ -147,23 +146,25 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
     public synchronized void logout(PlayerInterface player) throws RemoteException {
         String username = players.get(player).getName();
         players.remove(player);
-        
-        if(players.isEmpty()) {
+
+        if (players.isEmpty()) {
             started = false;
         } else {
             for (PlayerInterface i : players.keySet()) {
                 i.playerLeft(username);
             }
-            
-            for (Player pl : players.values()) {
-            if (!pl.status) {
-                return;
+
+            if (!started) {
+                for (Player pl : players.values()) {
+                    if (!pl.status) {
+                        return;
+                    }
+                }
+                newGame();
             }
+
         }
-        
-        newGame();
-        }
-        
+
     }
 
     @Override
@@ -210,12 +211,12 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
                 return;
             }
         }
-        
+
         newGame();
-        
+
     }
-    
-    private void newGame() throws RemoteException{
+
+    private void newGame() throws RemoteException {
         selected = games.get(new Random().nextInt(games.size()));
         started = true;
         horaAtual = LocalDateTime.now();
