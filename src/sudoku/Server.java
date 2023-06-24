@@ -119,8 +119,16 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
             started = false;
         } else {
             for (PlayerInterface i : players.keySet()) {
-            i.playerLeft(username);
+                i.playerLeft(username);
+            }
+            
+            for (Player pl : players.values()) {
+            if (!pl.status) {
+                return;
+            }
         }
+        
+        newGame();
         }
         
     }
@@ -169,7 +177,12 @@ public class Server extends UnicastRemoteObject implements SudokuInterface {
                 return;
             }
         }
-
+        
+        newGame();
+        
+    }
+    
+    private void newGame() throws RemoteException{
         selected = games.get(new Random().nextInt(games.size()));
         started = true;
         horaAtual = LocalDateTime.now();
